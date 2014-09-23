@@ -1,0 +1,38 @@
+# Symfony directories
+/web/bundles/
+/app/bootstrap.php.cache
+/app/cache/*
+/app/logs/*
+!app/cache/.gitkeep
+!app/logs/.gitkeep
+/build/
+/vendor/
+/bin/
+/composer.phar
+
+# Configuration files
+/app/config/parameters.ini
+/app/config/parameters.yml
+
+# Development enviroment directories
+/.idea
+/.DS_Store
+/node_modules
+/bower_components
+
+# VM files for local machine ID
+/.vagrant/machines
+
+# Other directories
+*/logs/*
+*/cache/*
+/app/bootstrap*
+/web/uploads/*
+/web/bundles/*
+/web/css/*
+/web/js/*
+/web/fonts/*
+/app/Resources/lib/*
+
+
+
