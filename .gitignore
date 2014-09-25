@@ -9,6 +9,9 @@
 /vendor/
 /bin/
 /composer.phar
+/app/SymfonyStandard/Composer.php
+/app/SymfonyStandard/RootPackageInstallSubscriber.php
+/app/SymfonyRequirements.php
 
 # Configuration files
 /app/config/parameters.ini

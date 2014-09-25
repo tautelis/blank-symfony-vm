@@ -63,11 +63,21 @@ php::module {
 augeas { "php_timezone_cli":
   context => "/files/etc/php5/cli/php.ini",
   changes => "set PHP/date.timezone Europe/Vilnius",
+  require => Class["php"]
 }
 
 augeas { "php_timezone_apache2":
   context => "/files/etc/php5/apache2/php.ini",
   changes => "set PHP/date.timezone Europe/Vilnius",
+  require => [
+    Class["php"],
+    Class["apache"]
+  ]
+}
+
+exec { "apache-reload":
+  command => "sudo service apache2 reload",
+  require => Exec['remove-default-enabled-site']
 }
 
 augeas { "xdebug":
@@ -80,7 +90,8 @@ augeas { "xdebug":
   "set REMOTE/xdebug.remote_enable 1",
   "set REMOTE/xdebug.remote_handler dbgp",
   "set REMOTE/xdebug.remote_port 9000"
-  ]
+  ],
+  require => Class["php"]
 }
 
 php::pear::config { auto_discover: value => "1" }
@@ -105,16 +116,32 @@ apache::vhost { $vhost_name:
   docroot  => $vhost_path
 }
 
-class { 'nodejs':
-    version => 'v0.10.26',
-    make_install => false,
-    before => Package <| |>,
+exec { "remove-default-enabled-site":
+  command => "rm /etc/apache2/sites-enabled/000-default",
+  require => Class['apache']
 }
 
-package { 'grunt-cli':provider => npm}
-package { 'grunt':provider => npm}
-package { 'gulp':provider => npm}
-package { 'bower':provider => npm}
+class { 'nodejs':
+    version => 'v0.10.26',
+    make_install => false
+}
+
+package { 'grunt-cli':
+  provider => npm,
+  require => Class['nodejs']
+}
+package { 'grunt':
+  provider => npm,
+  require => Class['nodejs']
+}
+package { 'gulp':
+  provider => npm,
+  require => Class['nodejs']
+}
+package { 'bower':
+  provider => npm,
+  require => Class['nodejs']
+}
 
 package { 'capistrano':
     provider => 'gem',

@@ -24,7 +24,7 @@ if [[ ! -f "${PUPPET_DIR}librarian-puppet-installed" ]]; then
     gem install librarian-puppet >/dev/null
     echo 'Finished installing librarian-puppet'
     echo 'Running initial librarian-puppet'
-    cd "$PUPPET_DIR" && librarian-puppet install --verbose --clean
+    cd "$PUPPET_DIR" && librarian-puppet install >/dev/null
     echo 'Finished running initial librarian-puppet'
     touch "${PUPPET_DIR}librarian-puppet-installed"
 else

@@ -10,14 +10,17 @@
 
 Vagrant.configure(2) do |config|
   config.vm.box = "nfq/wheezy"
-  config.vm.network :private_network, ip: "192.168.63.30"
+  config.vm.network :private_network, ip: "192.168.63.31"
   config.ssh.forward_agent = true
+  config.vm.hostname = "blank.dev"
+  config.hostsupdater.aliases = ["www.blank.dev"]
+
   config.vm.provider :virtualbox do |v|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     v.customize ["modifyvm", :id, "--memory", 1024]
     v.customize ["setextradata", :id, "--VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
   end
-  config.vm.hostname = "blank.dev"
+
   sync_type = Vagrant::Util::Platform.windows? == true ? "smb" : "nfs"
   config.vm.synced_folder "./", "/var/www", id: "vagrant-root" , :type => sync_type
   config.vm.provision :shell, :inline =>"sudo apt-get update"
@@ -28,7 +31,7 @@ Vagrant.configure(2) do |config|
     puppet.facter = {
         "ssh_username" => "vagrant",
         "vhost_name" => config.vm.hostname,
-        "vhost_path" => "/var/www"
+        "vhost_path" => "/var/www/web"
         }
   end
   config.ssh.shell = "bash -l"
